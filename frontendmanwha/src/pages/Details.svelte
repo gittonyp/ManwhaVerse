@@ -120,7 +120,8 @@
   {:else if data}
     <div
       class="banner"
-      style="background-image: url({api.getImageUrl(data.bannerImage)})"
+      style="background-image: url('data:image/webp;base64,{data.imageshow}');"
+>
     >
       <div class="overlay"></div>
     </div>
@@ -128,7 +129,7 @@
     <div class="container content">
       <div class="cover-section">
         <img
-          src={api.getImageUrl(data.bannerImage)}
+          src="data:image/webp;base64,{data.imageshow}"
           alt={data.title}
           class="cover"
         />

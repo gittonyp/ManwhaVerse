@@ -98,7 +98,7 @@
               author={item.author}
               status={item.status}
               views={item.views}
-              image={api.getImageUrl(item.bannerImage)}
+              image={(item.imageshow)}
               lastChapter={item.lastChapter}
             />
           {/each}

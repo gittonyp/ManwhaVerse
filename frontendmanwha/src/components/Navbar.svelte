@@ -1,16 +1,31 @@
 <script>
+  import { onMount } from "svelte";
   import { link,push } from "../lib/router.svelte.js";
   import { Search, Menu, User, BookOpen, LogIn, LogOut } from "lucide-svelte";
 
   let isMobileMenuOpen = $state(false);
   let searchTerm = $state("");  
   // Auth state - passed as props or managed internally
-  let { isLoggedIn = false, user = null } = $props();
+  let { isLoggedIn = false, userId = null } = $props();
   
   function toggleMobileMenu() {
     isMobileMenuOpen = !isMobileMenuOpen;
   }
-
+  
+  onMount(async () => {
+        // Check auth
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            try {
+                const user = JSON.parse(storedUser);
+                isLoggedIn = true;
+                userId = user.id;
+            } catch (e) {
+                console.error("Auth error", e);
+            }
+        }
+    });
+    
   function logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -53,11 +68,11 @@
 />
 </div>
 
-      {#if isLoggedIn && user}
+      {#if isLoggedIn && userId}
         <div class="user-menu">
           <button class="icon-btn user-btn" aria-label="Profile">
             <User size={20} />
-            <span class="username">{user.username}</span>
+            <span class="username">{userId.username}</span>
           </button>
           <button
             class="icon-btn"

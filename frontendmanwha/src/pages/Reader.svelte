@@ -44,7 +44,7 @@
       const chapData = await api.chapters.getById(currentId);
       chapter = chapData;
       console.log("[Reader] Chapter loaded:", chapter);
-
+      console.log(chapter.images[0]);
       // 2. Fetch comments for this chapter (using mangaUrl and chapterId)
       if (chapter.manwhaUrl) {
         // Fetch comments in parallel with chapter list
@@ -205,13 +205,13 @@
     </div>
 
     <div class="pages">
-      {#each chapter.images || [] as image, index}
-        <img
-          src={api.getImageUrl(image.imagePath)}
-          alt={`Page ${image.pageNumber}`}
-          loading={index < 3 ? "eager" : "lazy"}
-        />
-      {/each}
+     {#each chapter.images as image, index}
+  <img
+    src={image.imagePath} 
+    alt={`Page ${image.pageNumber}`}
+    loading={index < 3 ? "eager" : "lazy"}
+  />
+{/each}
 
       {#if !chapter.images || chapter.images.length === 0}
         <div class="no-pages">

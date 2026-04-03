@@ -7,7 +7,7 @@
 
 <a href={`#/details/${encodeURIComponent(id)}`} use:link class="card">
     <div class="image-container">
-        <img src={image} alt={title} loading="lazy"/>
+        <img src="data:image/webp;base64,{image}" alt={title} loading="lazy"/>
         <div class="overlay">
             <span class="view-btn">View Details</span>
         </div>
