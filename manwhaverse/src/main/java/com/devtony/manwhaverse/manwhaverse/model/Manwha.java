@@ -1,7 +1,16 @@
 package com.devtony.manwhaverse.manwhaverse.model;
 
-import jakarta.persistence.*;
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.SecondaryTable;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "manga")
@@ -25,6 +34,9 @@ public class Manwha {
 
     @Column(table = "manga_details", name = "banner_image")
     private String bannerImage;
+
+    @Column(table = "manga_details", name = "imageshow")
+    private byte[] imageshow;
 
     @Column(table = "manga_details", name = "author")
     private String author;
@@ -50,6 +62,9 @@ public class Manwha {
 
     public Integer getLastChapter() { return lastChapter; }
     public void setLastChapter(Integer lastChapter) { this.lastChapter = lastChapter; }
+
+    public byte[] getImageshow() { return imageshow; }
+    public void setImageshow(byte[] imageshow) { this.imageshow = imageshow; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }

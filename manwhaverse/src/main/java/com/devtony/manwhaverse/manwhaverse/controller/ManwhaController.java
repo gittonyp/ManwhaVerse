@@ -70,4 +70,6 @@ public class ManwhaController {
         List<Chapter> chapters = chapterService.getChaptersByManwha(id);
         return ResponseEntity.ok(chapters);
     }
+
+
 }
