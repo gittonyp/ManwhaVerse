@@ -1,14 +1,15 @@
 <script>
+  import { api } from "../lib/api.js";
     import { link } from "../lib/router.svelte.js";
     import { Star, Eye, User, BookOpen } from "lucide-svelte";
+    import { API_BASE_URL } from "../config.js";
 
     let { id, title, author = "", status = "", views = "", image ,lastChapter} = $props();
 </script>
 
 <a href={`#/details/${encodeURIComponent(id)}`} use:link class="card">
     <div class="image-container">
-        <img src="data:image/webp;base64,{image}" alt={title} loading="lazy"/>
-        <div class="overlay">
+        <img src={`${API_BASE_URL}/manwhas/banner?id=${id}`} alt={title} loading="lazy" />  <div class="overlay">
             <span class="view-btn">View Details</span>
         </div>
         {#if status}

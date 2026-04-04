@@ -37,6 +37,7 @@ export const api = {
         getById: (id) => api.get(`/manwhas/details?id=${encodeURIComponent(id)}`),
         getChapters: (id) => api.get(`/manwhas/chapters?id=${encodeURIComponent(id)}`),
         getSearch: (searchTitle) => api.get(`/manwhas/search/${(searchTitle)}`),
+        getBannerImage: (id) => api.get(`/manwhas/banner?id=${encodeURIComponent(id)}`)
     },
 
     chapters: {
