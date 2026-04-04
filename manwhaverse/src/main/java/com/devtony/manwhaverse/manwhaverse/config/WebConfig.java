@@ -10,10 +10,11 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5174")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
-    }
+    registry.addMapping("/**")
+            // The asterisk means "Allow any frontend URL to talk to me"
+            .allowedOriginPatterns("*") 
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
+}
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
