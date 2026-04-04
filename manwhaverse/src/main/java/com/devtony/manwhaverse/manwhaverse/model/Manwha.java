@@ -2,6 +2,8 @@ package com.devtony.manwhaverse.manwhaverse.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,6 +37,7 @@ public class Manwha {
     @Column(table = "manga_details", name = "banner_image")
     private String bannerImage;
 
+    @JsonIgnore
     @Column(table = "manga_details", name = "imageshow")
     private byte[] imageshow;
 

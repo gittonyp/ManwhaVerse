@@ -37,6 +37,13 @@ public class ManwhaController {
         return ResponseEntity.ok(manwhaService.getPopularManwhas());
     }
 
+    @GetMapping("/banner")
+    public ResponseEntity<byte[]> getBanner(@RequestParam String id) {
+    // Assuming your service finds the entity by ID and returns the byte array
+    byte[] image = manwhaService.getBannerById(id); 
+    return ResponseEntity.ok(image);
+    }
+
     @GetMapping("/search/{title}")
     public ResponseEntity<List<Manwha>> getSearch(@PathVariable String title) {
         List<Manwha> searchResult = manwhaService.searchManwha(title);

@@ -39,4 +39,14 @@ public class ManwhaService {
         List<Manwha> result=manwhaRepository.searchByTitle(title.trim());
         return result;
     }
+
+    public byte[] getBannerById(String id) {
+        // TODO Auto-generated method stub
+        return manwhaRepository.findById(id)
+            .map(manwha -> manwha.getImageshow())
+            .orElse(null);
+
+    }
+
+    
 }
