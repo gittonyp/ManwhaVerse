@@ -1,9 +1,9 @@
-name: Build and Deploy Frontend to Prod Repo
+name: Build and Deploy Full Stack
 
 on:
   push:
     branches:
-      - master # Triggers when you push to your source repo's master branch
+      - master # Triggers on push to your source repo's master branch
 
 jobs:
   build-and-deploy:
@@ -13,33 +13,75 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v4
 
+      # ==========================================
+      # FRONTEND: BUILD & PUSH
+      # ==========================================
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20' 
+          node-version: '24' 
 
-      # Navigate into the frontend folder to build
       - name: Install and Build Frontend
         working-directory: ./frontendmanwha
         run: |
           npm ci
           npm run build
 
-      # Push ONLY the dist folder to gittonyp/manwhaverse_on_github
-      - name: Push to Prod Repo
+      - name: Push Frontend to GitHub Pages Repo
         uses: cpina/github-action-push-to-another-repository@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.PROD_REPO_PAT }}
         with:
-          # Pointing specifically to the build output inside your frontend folder
           source-directory: 'frontendmanwha/dist'
-          
-          # Your target details
           destination-github-username: 'gittonyp'
           destination-repository-name: 'manwhaverse_on_github'
-          
-          # The branch in your target repo (your previous terminal showed 'main')
           target-branch: 'main'
-          
           user-email: github-actions[bot]@users.noreply.github.com
           commit-message: "Auto-deploy frontend (${{ github.sha }})"
+
+      # ==========================================
+      # BACKEND: BUILD & PUSH
+      # ==========================================
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '25' # Change to 21 if your project uses Java 21
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build Spring Boot Backend
+        working-directory: ./manwhaverse
+        run: |
+          chmod +x mvnw
+          ./mvnw clean package -DskipTests
+
+      - name: Deploy Backend to Docker Hosted Repo
+        env:
+          PROD_REPO_TOKEN: ${{ secrets.PROD_REPO_PAT }}
+        run: |
+          # 1. Configure Git
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # 2. Clone the target backend repository
+          git clone https://x-access-token:${PROD_REPO_TOKEN}@github.com/gittonyp/manwhaverse-docker-hosted.git backend-repo
+          
+          # 3. Clean old jar and update with new files
+          # This specifically protects your Dockerfile from being deleted
+          rm -f backend-repo/*.jar
+          
+          # Copy the newly built jar
+          cp manwhaverse/target/*.jar backend-repo/
+          
+          # Copy the SQLite database from your source repo
+          cp manwhaverse/mangadb.db backend-repo/
+          
+          # 4. Commit and Push
+          cd backend-repo
+          git add -A
+          if git diff-index --quiet HEAD; then
+            echo "No backend changes detected. Skipping push."
+          else
+            git commit -m "Auto-deploy backend jar and db (${{ github.sha }})"
+            git push origin main
+          fi
